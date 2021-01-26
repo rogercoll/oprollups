@@ -29,10 +29,50 @@ fn test_sign_transaction() {
 
 //Testing Merkle Tree
 
+
 #[test]
 fn test_merkle_tree_root() {
-    assert_eq!(mktree::root(), "8510B9169656743755BB8580A17E93AE16CC0C07699F053554C541DD5AA7F3B7".to_string())
+    let mut h1: [u8; 32] = [0u8; 32];
+    let mut h2: [u8; 32] = [0u8; 32];
+    let mut h3: [u8; 32] = [0u8; 32];
+    let mut h4: [u8; 32] = [0u8; 32];
+    h1[0] = 0x01;
+    h2[0] = 0x01;
+    h3[0] = 0x01;
+    h4[0] = 0x01;
+
+    assert_eq!(mktree::root(&h1, &h2, &h3, &h4), "0BDD69755E1C61796E85C475C1A6C878FC89E3B902E0E384B3EEC51E35E97003".to_string());
+
+    h1[0] = 0x02;
+    h2[0] = 0x01;
+    h3[0] = 0x01;
+    h4[0] = 0x01;
+
+    assert_eq!(mktree::root(&h1, &h2, &h3, &h4), "2B89C1D8A700536C13A0EC918722F07848DC6D25F93804A441A76C666D40E145".to_string());
+    
+    h1[0] = 0x01;
+    h2[0] = 0x02;
+    h3[0] = 0x01;
+    h4[0] = 0x01;
+
+    assert_eq!(mktree::root(&h1, &h2, &h3, &h4), "FFDE22BFF13493932AC9EFA33B305576EB082425BD2A1505C08B3B76548B07B1".to_string());
+
+    h1[0] = 0x01;
+    h2[0] = 0x01;
+    h3[0] = 0x02;
+    h4[0] = 0x01;
+
+    assert_eq!(mktree::root(&h1, &h2, &h3, &h4), "6D8DDBEE2B18A5634287EA7C59C34013A65DD7D5F6AA8959F40A02F1830F2FDD".to_string());
+    h1[0] = 0x01;
+    h2[0] = 0x01;
+    h3[0] = 0x01;
+    h4[0] = 0x02;
+
+    assert_eq!(mktree::root(&h1, &h2, &h3, &h4), "95BEE25B6BD37BD1E44C976D9DD2BBB188026B8993D0A705CE5701268F658556".to_string())
 }
+
+
+//Testing Account
 
 #[test]
 fn hash_person() {    
@@ -41,5 +81,13 @@ fn hash_person() {
     let t2 = account::Account{id: 1, value:2};
     assert_eq!("9a7092de278ac177df01118bfbce5b4af26d3e998e19141a5331c9c960793027" , &t2.hash().to_hex()[..]);
     let t3 = account::Account{id: 2, value:1};
-    assert_eq!("3e95d124e870f127ae8660d6523f85f3ff21ab7acfae66c9dd87d4b771e83fb2" , &t3.hash().to_hex()[..])
+    assert_eq!("3e95d124e870f127ae8660d6523f85f3ff21ab7acfae66c9dd87d4b771e83fb2" , &t3.hash().to_hex()[..]);
+    let t4 = account::Account{id: 2, value:2};
+    assert_eq!("9bffdbf7084e53304ca5f89dc72ab31c67430a121a68d217e7864c07a2444a0c" , &t4.hash().to_hex()[..])
+}
+
+//Testing lib
+#[test]
+fn test_new_merkle_tree() {
+    println!("Merkle:  {}", opr::new_merkle_tree());
 }

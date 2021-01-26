@@ -49,18 +49,8 @@ use core::fmt::Write;
 
 
 //SHA3-256
-pub fn root() -> String {
-
-    let mut h1 = [0u8; 32];
-    let mut h2 = [0u8; 32];
-    let mut h3 = [0u8; 32];
-    let mut h4 = [0u8; 32];
-    h1[0] = 0x11;
-    h2[0] = 0x22;
-    h3[0] = 0x33;
-    h4[0] = 0x44;
-
-    let t: MerkleTree<[u8; 32], ExampleAlgorithm, VecStore<_>> = MerkleTree::try_from_iter(vec![h1, h2, h3, h4].into_iter().map(Ok)).unwrap();
+pub fn root(h1: &[u8; 32], h2: &[u8; 32], h3: &[u8; 32], h4: &[u8; 32]) -> String {
+    let t: MerkleTree<[u8; 32], ExampleAlgorithm, VecStore<_>> = MerkleTree::try_from_iter(vec![*h1, *h2, *h3, *h4].into_iter().map(Ok)).unwrap();
     let root = &t.root();
     let mut s = String::with_capacity(2 * (t.root().len()));
     for byte in root {
