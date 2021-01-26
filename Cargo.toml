@@ -9,3 +9,6 @@ edition = "2018"
 [dependencies]
 merkletree = "0.21.0"
 rust-crypto = "0.2.36"
+blake3 = "0.3.7"
+hex = "0.4.2"
+
