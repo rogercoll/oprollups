@@ -1,11 +1,9 @@
-use std::str;
 use std::hash::Hasher;
 use crypto::sha3::{Sha3, Sha3Mode};
 use crypto::digest::Digest;
-use merkletree::hash::{Algorithm, Hashable};
+use merkletree::hash::{Algorithm};
 use merkletree::merkle::MerkleTree;
 use merkletree::store::VecStore;
-use std::borrow::Cow;
 
 
 pub struct ExampleAlgorithm(Sha3);

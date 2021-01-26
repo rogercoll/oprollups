@@ -1,6 +1,4 @@
-use std::collections::hash_map::DefaultHasher;
-use blake3::Hash;
-pub struct Person {
+pub struct Account {
     pub id: u32,
     pub value: u32,
 }
@@ -13,7 +11,7 @@ fn transform_u32_to_array_of_u8(x:u32) -> [u8;4] {
     return [b1, b2, b3, b4]
 }
 
-impl Person {
+impl Account {
     pub fn hash(&self) -> blake3::Hash {
         let idu8 = transform_u32_to_array_of_u8(self.id);
         let valueu8 = transform_u32_to_array_of_u8(self.value);
