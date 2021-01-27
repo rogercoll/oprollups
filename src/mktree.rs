@@ -58,3 +58,14 @@ pub fn root(h1: &[u8; 32], h2: &[u8; 32], h3: &[u8; 32], h4: &[u8; 32]) -> Strin
     }
     s
 }
+
+//SHA3-256
+pub fn root2(leafs: Vec<[u8;32]>) -> String {
+    let t: MerkleTree<[u8; 32], ExampleAlgorithm, VecStore<_>> = MerkleTree::try_from_iter(leafs.into_iter().map(Ok)).unwrap();
+    let root = &t.root();
+    let mut s = String::with_capacity(2 * (t.root().len()));
+    for byte in root {
+        write!(s, "{:02X}", byte).expect("Could not convert to hexadecimal value");
+    }
+    s
+}

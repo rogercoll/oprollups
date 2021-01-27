@@ -76,18 +76,27 @@ fn test_merkle_tree_root() {
 
 #[test]
 fn hash_person() {    
-    let t1 = account::Account{id: 1, value:1};
+    let t1 = account::new(1, 1, 0);
     assert_eq!("e14741cbd9ec785db9faca2d4b201badecf2b3c539bfba7092d623df7bea7174" , &t1.hash().to_hex()[..]);
-    let t2 = account::Account{id: 1, value:2};
+    let t2 = account::new(1, 2, 0);
     assert_eq!("9a7092de278ac177df01118bfbce5b4af26d3e998e19141a5331c9c960793027" , &t2.hash().to_hex()[..]);
-    let t3 = account::Account{id: 2, value:1};
+    let t3 = account::new(2, 1, 0);
     assert_eq!("3e95d124e870f127ae8660d6523f85f3ff21ab7acfae66c9dd87d4b771e83fb2" , &t3.hash().to_hex()[..]);
-    let t4 = account::Account{id: 2, value:2};
+    let t4 = account::new(2, 2, 0);
     assert_eq!("9bffdbf7084e53304ca5f89dc72ab31c67430a121a68d217e7864c07a2444a0c" , &t4.hash().to_hex()[..])
 }
 
 //Testing lib
 #[test]
 fn test_new_merkle_tree() {
-    println!("Merkle:  {}", opr::new_merkle_tree());
+    let a1 = account::new(1002, 1, 0);
+    let a2 = account::new(12, 2, 1);
+    let a3 = account::new(345, 1, 2);
+    let a4 = account::new(999, 2, 3);
+    let mut all_accounts = opr::Accounts::new();
+    all_accounts.add(a1);
+    all_accounts.add(a2);
+    all_accounts.add(a3);
+    all_accounts.add(a4);
+    println!("Merkle:  {}", all_accounts.merkle_tree());
 }
