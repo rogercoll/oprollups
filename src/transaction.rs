@@ -1,7 +1,6 @@
 
-#[derive(Hash)]
 pub struct Transaction {
-    nonce: u8,
+    nonce:   u8,
     gas_price: u8,
     gas: u8,
     to: u32, //4 Byte address

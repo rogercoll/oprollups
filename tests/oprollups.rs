@@ -94,9 +94,9 @@ fn test_new_merkle_tree() {
     let a3 = account::new(345, 1, 2);
     let a4 = account::new(999, 2, 3);
     let mut all_accounts = opr::Accounts::new();
-    all_accounts.add(a1);
-    all_accounts.add(a2);
-    all_accounts.add(a3);
-    all_accounts.add(a4);
+    all_accounts.add(&a1);
+    all_accounts.add(&a2);
+    all_accounts.add(&a3);
+    all_accounts.add(&a4);
     println!("Merkle:  {}", all_accounts.merkle_tree());
 }
