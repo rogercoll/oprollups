@@ -3,8 +3,8 @@ pub struct Transaction {
     nonce:   u8,
     gas_price: u8,
     gas: u8,
-    to: u32, //4 Byte address
-    from: u32,
+    pub to: u32, //4 Byte address
+    pub from: u32,
     pub value: u32,
     pub signature: u8,
 }

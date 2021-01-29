@@ -1,6 +1,6 @@
 pub struct Account {
     pub addr: u32,
-    pub value: u32,
+    pub balance: u32,
     pub id: u32,
 }
 
@@ -15,7 +15,7 @@ fn transform_u32_to_array_of_u8(x:u32) -> [u8;4] {
 impl Account {
     pub fn hash(&self) -> blake3::Hash {
         let addr_u8 = transform_u32_to_array_of_u8(self.addr);
-        let value_u8 = transform_u32_to_array_of_u8(self.value);
+        let value_u8 = transform_u32_to_array_of_u8(self.balance);
         let array: [u8; 8] = {
             let mut x = [0; 8];
             x[0] = addr_u8[0]; 
@@ -32,10 +32,10 @@ impl Account {
     }
 }
 
-pub fn new(_addr: u32, _value: u32, _id: u32) -> Account {
+pub fn new(_addr: u32, _balance: u32, _id: u32) -> Account {
     Account {
         addr: _addr,
-        value: _value,
+        balance: _balance,
         id: _id,
     }
 }

@@ -4,10 +4,6 @@ use oprollups::transaction;
 use oprollups::mktree;
 use oprollups::account;
 
-#[test]
-fn test_hello() {
-    assert_eq!(opr::hello(), "Hello");
-}
 
 #[test]
 fn test_hello_batch() {
@@ -94,9 +90,34 @@ fn test_new_merkle_tree() {
     let a3 = account::new(345, 1, 2);
     let a4 = account::new(999, 2, 3);
     let mut all_accounts = opr::Accounts::new();
-    all_accounts.add(&a1);
-    all_accounts.add(&a2);
-    all_accounts.add(&a3);
-    all_accounts.add(&a4);
+    all_accounts.add(a1);
+    all_accounts.add(a2);
+    all_accounts.add(a3);
+    all_accounts.add(a4);
     println!("Merkle:  {}", all_accounts.merkle_tree());
+    //println!("Merkle:  {}", a1.balance);
+
+}
+
+#[test]
+fn test_new_batch() {
+    let a1 = account::new(1002, 100, 0);
+    let a2 = account::new(12, 100, 1);
+    let a3 = account::new(345, 100, 2);
+    let a4 = account::new(999, 100, 3);
+    let mut all_accounts = opr::Accounts::new();
+    all_accounts.add(a1);
+    all_accounts.add(a2);
+    all_accounts.add(a3);
+    all_accounts.add(a4);
+    let t1 = transaction::new(1002,345,5);
+    let t2 = transaction::new(1002,345,82);
+    let t3 = transaction::new(999,12,4);
+
+    let mut txs = opr::Transactions::new();
+    txs.add(t1);
+    txs.add(t2);
+    txs.add(t3);
+    let b1 = opr::Batch::new(&mut all_accounts, txs);
+    println!("{}", b1)
 }
