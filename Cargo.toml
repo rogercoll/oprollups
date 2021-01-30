@@ -11,4 +11,7 @@ merkletree = "0.21.0"
 rust-crypto = "0.2.36"
 blake3 = "0.3.7"
 hex = "0.4.2"
-
+bn = "0.4.3"
+rand = "~0.3.14"
+rustc-serialize = "~0.3.19"
+bls-signatures-rs = "0.1.0"

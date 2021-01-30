@@ -19,8 +19,8 @@ fn test_transaction() {
 #[test]
 fn test_sign_transaction() {
     let mut t = transaction::new(1,2,3);
-    t.sign();
-    assert_eq!(t.signature, 3)
+    t.sign("c9afa9d845ba75166b5c215767b1d6934e50c3db36e89b127b8a622b120f6721");
+    assert_eq!(hex::encode(t.signature), "021f5925b1955bd4b36286471dc37d141520ee1303423a59faf2e2e1f70d1012")
 }
 
 //Testing Merkle Tree
@@ -72,23 +72,23 @@ fn test_merkle_tree_root() {
 
 #[test]
 fn hash_person() {    
-    let t1 = account::new(1, 1, 0);
+    let t1 = account::new(1, 1);
     assert_eq!("e14741cbd9ec785db9faca2d4b201badecf2b3c539bfba7092d623df7bea7174" , &t1.hash().to_hex()[..]);
-    let t2 = account::new(1, 2, 0);
+    let t2 = account::new(1, 2);
     assert_eq!("9a7092de278ac177df01118bfbce5b4af26d3e998e19141a5331c9c960793027" , &t2.hash().to_hex()[..]);
-    let t3 = account::new(2, 1, 0);
+    let t3 = account::new(2, 1);
     assert_eq!("3e95d124e870f127ae8660d6523f85f3ff21ab7acfae66c9dd87d4b771e83fb2" , &t3.hash().to_hex()[..]);
-    let t4 = account::new(2, 2, 0);
+    let t4 = account::new(2, 2);
     assert_eq!("9bffdbf7084e53304ca5f89dc72ab31c67430a121a68d217e7864c07a2444a0c" , &t4.hash().to_hex()[..])
 }
 
 //Testing lib
 #[test]
 fn test_new_merkle_tree() {
-    let a1 = account::new(1002, 1, 0);
-    let a2 = account::new(12, 2, 1);
-    let a3 = account::new(345, 1, 2);
-    let a4 = account::new(999, 2, 3);
+    let a1 = account::new(1002, 1);
+    let a2 = account::new(12, 2);
+    let a3 = account::new(345, 1);
+    let a4 = account::new(999, 2);
     let mut all_accounts = opr::Accounts::new();
     all_accounts.add(a1);
     all_accounts.add(a2);
@@ -101,18 +101,18 @@ fn test_new_merkle_tree() {
 
 #[test]
 fn test_new_batch() {
-    let a1 = account::new(1002, 100, 0);
-    let a2 = account::new(12, 100, 1);
-    let a3 = account::new(345, 100, 2);
-    let a4 = account::new(999, 100, 3);
     let mut all_accounts = opr::Accounts::new();
-    all_accounts.add(a1);
-    all_accounts.add(a2);
-    all_accounts.add(a3);
-    all_accounts.add(a4);
-    let t1 = transaction::new(1002,345,5);
-    let t2 = transaction::new(1002,345,82);
-    let t3 = transaction::new(999,12,4);
+    all_accounts.add(account::new(1002, 100));
+    all_accounts.add(account::new(12, 100));
+    all_accounts.add(account::new(345, 100));
+    all_accounts.add(account::new(999, 100));
+    all_accounts.add(account::new(1022, 100));
+    all_accounts.add(account::new(1234, 100));
+    all_accounts.add(account::new(34, 100));
+    all_accounts.add(account::new(997, 100));
+    let t1 = transaction::new(0,2,5);
+    let t2 = transaction::new(0,2,82);
+    let t3 = transaction::new(7,1,4);
 
     let mut txs = opr::Transactions::new();
     txs.add(t1);

@@ -30,7 +30,10 @@ pub struct Batch {
 }
 
 pub struct Accounts {
-    hash_map: HashMap<u32, account::Account>,
+    next_id: u32,
+    map_id: HashMap<u32, account::Account>,
+    //Hash to seach the id of a giving address
+    map_addr: HashMap<String, u32>,
 }
 
 pub struct Transactions {
@@ -39,15 +42,19 @@ pub struct Transactions {
 
 impl Accounts {
     pub fn new() -> Accounts {
-        Accounts {hash_map: HashMap::new()}
+        Accounts {next_id:0, map_id: HashMap::new(), map_addr: HashMap::new()}
     }
-    pub fn add(&mut self, user: account::Account) {
-        self.hash_map.insert(user.addr, user);
+    pub fn add(&mut self, mut user: account::Account) {
+        user.set_id(self.next_id);
+        let hash_addr = user.hash_addr();
+        self.map_id.insert(self.next_id, user);
+        self.map_addr.insert(hash_addr, self.next_id);
+        self.next_id += 1;
     }
     pub fn merkle_tree(&self) -> String {
-        let mut leafs:Vec<[u8;32]> = vec![[0u8;32]; self.hash_map.len()];    
-        for (_, acc) in &self.hash_map {
-            leafs[acc.id as usize] = *acc.hash().as_bytes();
+        let mut leafs:Vec<[u8;32]> = vec![[0u8;32]; self.map_id.len()];    
+        for (_, acc) in &self.map_id {
+            leafs[acc.get_id() as usize] = *acc.hash().as_bytes();
         }
         mktree::root2(leafs)
     }
@@ -68,7 +75,7 @@ impl Batch {
         for tx in txs.b_transactions.iter() {
             if tx.value > 0 {
                 let ok: bool = false;
-                match acc.hash_map.get_mut(&tx.from) {
+                match acc.map_id.get_mut(&tx.from) {
                     Some(sender) => {
                         if tx.value < sender.balance {
                             sender.balance -= tx.value;
@@ -80,7 +87,7 @@ impl Batch {
                     None => println!("Sender {} not found!", tx.from)
                 }
                 if ok {
-                    match acc.hash_map.get_mut(&tx.to) {
+                    match acc.map_id.get_mut(&tx.to) {
                         Some(receiver) => {
                             receiver.balance += tx.value;
                         },
