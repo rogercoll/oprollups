@@ -2,12 +2,19 @@
 use bls_signatures_rs::bn256;
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
+use std::error;
+
 
 //Balance in weis
 pub struct Account {
     pub addr: [u8; 64],
     pub balance: u32,
     id: u32,
+}
+
+pub struct AccountResult {
+    pub account: Account,
+    pub private_key: String,
 }
 
 fn transform_u32_to_array_of_u8(x:u32) -> [u8;4] {
@@ -38,6 +45,7 @@ impl Account {
         hasher.input(&array);
         let mut out: [u8; 32] = [0u8; 32];
         hasher.result(&mut out);
+        //println!("Hash length: {}", hasher.output_bytes());
         out
     }
     pub fn hash_str(&self) -> String {
@@ -85,16 +93,19 @@ fn vector_as_u8_64_array(vector: Vec<u8>) -> [u8;64] {
     arr
 }
 
-pub fn new(_addr: u32, _balance: u32) -> Account {
+pub fn new(_addr: u32, _balance: u32) -> Result<AccountResult, String> {
     let sk: [u8; 32]  = rand::random();
-    let pk1 = bn256::PrivateKey::new(&sk).unwrap();
-    println!("Private key: {:?}\n", hex::encode(pk1.to_bytes().unwrap()));
-    let pubkey = pk1.derive_public_key().unwrap();
-
-    Account {
+    let pk1 = bn256::PrivateKey::new(&sk).map_err(|e| format!("BN256 failed: {}", e))?;
+    let priv_key =  hex::encode(pk1.to_bytes().map_err(|e| format!("BN256 failed: {}", e))?);
+    let pubkey = pk1.derive_public_key().map_err(|e| format!("BN256 failed: {}", e))?;
+    let new_account = Account {
         addr: vector_as_u8_64_array(pubkey.to_compressed().unwrap()),
         balance: _balance,
         id: 0,
-    }
+    };
+    Ok(AccountResult{
+        account: new_account,
+        private_key: priv_key
+    })
 }
 

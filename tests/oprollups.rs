@@ -71,33 +71,34 @@ fn test_merkle_tree_root() {
 //Testing Account
 
 #[test]
-fn hash_person() {    
-    let t1 = account::new(1, 1);
+fn new_account() {    
+    let t1 = account::new(1, 1).unwrap();
     //let t1_expected: [u8; 32] = [0; 32];
-    let t1str: String = t1.hash().iter()
+    let t1str: String = t1.account.hash().iter()
                                .map(|b| format!("{:02x?}", b))
                                .collect();
-    assert_eq!(t1str , t1.hash_str());
+    assert_eq!(t1str , t1.account.hash_str());
     //assert!(t1_expected.iter().zip(t1.hash().iter()).all(|(a,b)| a == b), "Arrays are not equal");
-    let t2 = account::new(1, 2);
-    let t2str: String = t2.hash().iter()
+    let t2 = account::new(1, 2).unwrap();
+    let t2str: String = t2.account.hash().iter()
                                .map(|b| format!("{:02x?}", b))
                                .collect();
-    assert_eq!(t2str , t2.hash_str());
+    assert_eq!(t2str , t2.account.hash_str());
     assert_ne!(t1str, t2str);
-    let t3 = account::new(2, 1);
-    let t3str: String = t3.hash().iter()
+    assert_ne!(t1.private_key, t2.private_key);
+    let t3 = account::new(2, 1).unwrap();
+    let t3str: String = t3.account.hash().iter()
                                .map(|b| format!("{:02x?}", b))
                                .collect();
-    assert_eq!(t3str , t3.hash_str());
+    assert_eq!(t3str , t3.account.hash_str());
     assert_ne!(t1str, t3str);
     assert_ne!(t2str, t3str);
 
-    let t4 = account::new(2, 2);
-    let t4str: String = t4.hash().iter()
+    let t4 = account::new(2, 2).unwrap();
+    let t4str: String = t4.account.hash().iter()
                                 .map(|b| format!("{:02x?}", b))
                                 .collect();
-    assert_eq!(t4str , t4.hash_str());
+    assert_eq!(t4str , t4.account.hash_str());
     assert_ne!(t1str, t4str);
     assert_ne!(t2str, t4str);
     assert_ne!(t3str, t4str);
@@ -106,15 +107,15 @@ fn hash_person() {
 //Testing lib
 #[test]
 fn test_new_merkle_tree() {
-    let a1 = account::new(1002, 1);
-    let a2 = account::new(12, 2);
-    let a3 = account::new(345, 1);
-    let a4 = account::new(999, 2);
+    let a1 = account::new(1002, 1).unwrap();
+    let a2 = account::new(12, 2).unwrap();
+    let a3 = account::new(345, 1).unwrap();
+    let a4 = account::new(999, 2).unwrap();
     let mut all_accounts = opr::Accounts::new();
-    all_accounts.add(a1);
-    all_accounts.add(a2);
-    all_accounts.add(a3);
-    all_accounts.add(a4);
+    all_accounts.add(a1.account);
+    all_accounts.add(a2.account);
+    all_accounts.add(a3.account);
+    all_accounts.add(a4.account);
     println!("Merkle:  {}", all_accounts.merkle_tree());
     //println!("Merkle:  {}", a1.balance);
 
@@ -123,14 +124,14 @@ fn test_new_merkle_tree() {
 #[test]
 fn test_new_batch() {
     let mut all_accounts = opr::Accounts::new();
-    all_accounts.add(account::new(1002, 100));
-    all_accounts.add(account::new(12, 100));
-    all_accounts.add(account::new(345, 100));
-    all_accounts.add(account::new(999, 100));
-    all_accounts.add(account::new(1022, 100));
-    all_accounts.add(account::new(1234, 100));
-    all_accounts.add(account::new(34, 100));
-    all_accounts.add(account::new(997, 100));
+    all_accounts.add(account::new(1002, 100).unwrap().account);
+    all_accounts.add(account::new(12, 100).unwrap().account);
+    all_accounts.add(account::new(345, 100).unwrap().account);
+    all_accounts.add(account::new(999, 100).unwrap().account);
+    all_accounts.add(account::new(1022, 100).unwrap().account);
+    all_accounts.add(account::new(1234, 100).unwrap().account);
+    all_accounts.add(account::new(34, 100).unwrap().account);
+    all_accounts.add(account::new(997, 100).unwrap().account);
     let t1 = transaction::new(0,2,5);
     let t2 = transaction::new(0,2,82);
     let t3 = transaction::new(7,1,4);
