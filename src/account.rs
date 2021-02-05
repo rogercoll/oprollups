@@ -19,7 +19,9 @@ fn transform_u32_to_array_of_u8(x:u32) -> [u8;4] {
 }
 
 impl Account {
-    pub fn hash(&self) -> blake3::Hash {
+    pub fn hash(&self) -> [u8; 32] {
+        let mut hasher = Sha3::sha3_256();
+
         //let addr_u8 = transform_u32_to_array_of_u8(self.addr);
         let balance_u8 = transform_u32_to_array_of_u8(self.balance);
         let array: [u8; 68] = {
@@ -33,7 +35,29 @@ impl Account {
             x[67] = balance_u8[3];
             x
         };
-        blake3::hash(&array)
+        hasher.input(&array);
+        let mut out: [u8; 32] = [0u8; 32];
+        hasher.result(&mut out);
+        out
+    }
+    pub fn hash_str(&self) -> String {
+        let mut hasher = Sha3::sha3_256();
+
+        //let addr_u8 = transform_u32_to_array_of_u8(self.addr);
+        let balance_u8 = transform_u32_to_array_of_u8(self.balance);
+        let array: [u8; 68] = {
+            let mut x = [0; 68];
+            for i in 0..self.addr.len() {
+                x[i] = self.addr[i];
+            }
+            x[64] = balance_u8[0]; 
+            x[65] = balance_u8[1];
+            x[66] = balance_u8[2]; 
+            x[67] = balance_u8[3];
+            x
+        };
+        hasher.input(&array);
+        hasher.result_str()
     }
     pub fn hash_addr(&self) -> String {
         let mut hasher = Sha3::sha3_256();

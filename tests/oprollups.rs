@@ -73,13 +73,34 @@ fn test_merkle_tree_root() {
 #[test]
 fn hash_person() {    
     let t1 = account::new(1, 1);
-    assert_eq!("e14741cbd9ec785db9faca2d4b201badecf2b3c539bfba7092d623df7bea7174" , &t1.hash().to_hex()[..]);
+    //let t1_expected: [u8; 32] = [0; 32];
+    let t1str: String = t1.hash().iter()
+                               .map(|b| format!("{:02x?}", b))
+                               .collect();
+    assert_eq!(t1str , t1.hash_str());
+    //assert!(t1_expected.iter().zip(t1.hash().iter()).all(|(a,b)| a == b), "Arrays are not equal");
     let t2 = account::new(1, 2);
-    assert_eq!("9a7092de278ac177df01118bfbce5b4af26d3e998e19141a5331c9c960793027" , &t2.hash().to_hex()[..]);
+    let t2str: String = t2.hash().iter()
+                               .map(|b| format!("{:02x?}", b))
+                               .collect();
+    assert_eq!(t2str , t2.hash_str());
+    assert_ne!(t1str, t2str);
     let t3 = account::new(2, 1);
-    assert_eq!("3e95d124e870f127ae8660d6523f85f3ff21ab7acfae66c9dd87d4b771e83fb2" , &t3.hash().to_hex()[..]);
+    let t3str: String = t3.hash().iter()
+                               .map(|b| format!("{:02x?}", b))
+                               .collect();
+    assert_eq!(t3str , t3.hash_str());
+    assert_ne!(t1str, t3str);
+    assert_ne!(t2str, t3str);
+
     let t4 = account::new(2, 2);
-    assert_eq!("9bffdbf7084e53304ca5f89dc72ab31c67430a121a68d217e7864c07a2444a0c" , &t4.hash().to_hex()[..])
+    let t4str: String = t4.hash().iter()
+                                .map(|b| format!("{:02x?}", b))
+                                .collect();
+    assert_eq!(t4str , t4.hash_str());
+    assert_ne!(t1str, t4str);
+    assert_ne!(t2str, t4str);
+    assert_ne!(t3str, t4str);
 }
 
 //Testing lib

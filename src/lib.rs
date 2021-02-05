@@ -54,7 +54,7 @@ impl Accounts {
     pub fn merkle_tree(&self) -> String {
         let mut leafs:Vec<[u8;32]> = vec![[0u8;32]; self.map_id.len()];    
         for (_, acc) in &self.map_id {
-            leafs[acc.get_id() as usize] = *acc.hash().as_bytes();
+            leafs[acc.get_id() as usize] = acc.hash();
         }
         mktree::root2(leafs)
     }
